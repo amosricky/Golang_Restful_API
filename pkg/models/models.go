@@ -23,7 +23,7 @@ type Model struct {
 // Setup initializes the database instance
 func Setup() {
 	var err error
-	db, err = gorm.Open("sqlite3", "/home/ricky/go/src/Golang_Restful_API/gorm.db")
+	db, err = gorm.Open("sqlite3", "./gorm.db")
 
 	if err != nil {
 		log.Fatalf("models.Setup err: %v", err)
