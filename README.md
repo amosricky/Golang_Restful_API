@@ -2,11 +2,13 @@
 A simple restful API.
 
 ## Installation
+### Git clone from github
 ```
-Git clone from github
 $ git clone https://github.com/amosricky/Golang_Restful_API.git
+```
 
-GO get from github
+### Go get from github
+```
 $ go get github.com/amosricky/Golang_Restful_API
 ```
 
@@ -32,8 +34,6 @@ $ docker build -t golang-api .
 
 $ docker run -p 8000:8000 golang-api
 ```
-
-![image](https://i.imgur.com/bVRLTP4.jpg)
 
 ## Features
 
