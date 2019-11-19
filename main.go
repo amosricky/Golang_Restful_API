@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Golang_Restful_API/pkg/logging"
 	"Golang_Restful_API/pkg/models"
 	"Golang_Restful_API/pkg/routers"
 	"Golang_Restful_API/pkg/setting"
@@ -16,6 +17,7 @@ import (
 func main() {
 	setting.Setup()
 	models.Setup()
+	logging.Setup()
 
 	router := routers.InitRouter()
 
@@ -26,7 +28,6 @@ func main() {
 		WriteTimeout:   setting.ServerSetting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
-	//s.ListenAndServe()
 
 	go func() {
 		if err := s.ListenAndServe(); err != nil {
