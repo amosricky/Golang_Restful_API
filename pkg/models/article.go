@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
+	"github.com/sirupsen/logrus"
 )
 
 type Article struct {
@@ -22,7 +23,7 @@ type Article struct {
 func (a *Article) InitAriticleTable()  {
 	if !db.HasTable(&Article{}) {
 		if err := db.CreateTable(&Article{}).Error; err != nil {
-			panic(err)
+			logrus.Panic(err)
 		}
 	}
 }

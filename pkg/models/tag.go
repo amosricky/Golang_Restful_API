@@ -1,6 +1,8 @@
 package models
 
-import "Golang_Restful_API/pkg/logging"
+import (
+	"github.com/sirupsen/logrus"
+)
 
 type Tag struct {
 	Model
@@ -14,7 +16,7 @@ type Tag struct {
 func (t *Tag) InitTagTable()  {
 	if !db.HasTable(&Tag{}) {
 		if err := db.CreateTable(&Tag{}).Error; err != nil {
-			logging.Fatal(err.Error)
+			logrus.Panic(err)
 		}
 	}
 }

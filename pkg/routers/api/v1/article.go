@@ -2,12 +2,12 @@ package v1
 
 import (
 	"Golang_Restful_API/pkg/e"
-	"Golang_Restful_API/pkg/logging"
 	"Golang_Restful_API/pkg/models"
 	"Golang_Restful_API/pkg/setting"
 	"Golang_Restful_API/pkg/util"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"github.com/unknwon/com"
 	"net/http"
 )
@@ -29,7 +29,7 @@ func GetArticle(c *gin.Context) {
 		}
 	} else {
 		for _, err := range valid.Errors {
-			logging.Error(err.Key, err.Message)
+			logrus.Error(err)
 		}
 	}
 
@@ -70,7 +70,7 @@ func GetArticles(c *gin.Context) {
 
 	} else {
 		for _, err := range valid.Errors {
-			logging.Error(err.Key, err.Message)
+			logrus.Error(err)
 		}
 	}
 
@@ -114,7 +114,7 @@ func AddArticle(c *gin.Context) {
 		}
 	} else {
 		for _, err := range valid.Errors {
-			logging.Error(err.Key, err.Message)
+			logrus.Error(err)
 		}
 	}
 
@@ -178,7 +178,7 @@ func EditArticle(c *gin.Context) {
 		}
 	} else {
 		for _, err := range valid.Errors {
-			logging.Error(err.Key, err.Message)
+			logrus.Error(err)
 		}
 	}
 
@@ -205,7 +205,7 @@ func DeleteArticle(c *gin.Context) {
 		}
 	} else {
 		for _, err := range valid.Errors {
-			logging.Error(err.Key, err.Message)
+			logrus.Error(err)
 		}
 	}
 

@@ -15,11 +15,11 @@ type App struct {
 	ImagePrefixUrl string
 	ImageSavePath string
 	ImageMaxSize int
-	ImageAllowExts []string
+	ImageAllowExtension []string
 
 	LogSavePath string
 	LogSaveName string
-	LogFileExt string
+	LogFileExtension string
 	TimeFormat string
 }
 

@@ -1,5 +1,7 @@
 package models
 
+import "github.com/sirupsen/logrus"
+
 type Auth struct {
 	ID int `gorm:"primary_key" json:"id"`
 	Username string `json:"username"`
@@ -9,7 +11,7 @@ type Auth struct {
 func (a *Auth) InitAuthTable()  {
 	if !db.HasTable(&Auth{}) {
 		if err := db.CreateTable(&Auth{}).Error; err != nil {
-			panic(err)
+			logrus.Panic(err)
 		}
 	}
 }

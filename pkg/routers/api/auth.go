@@ -1,10 +1,10 @@
 package api
 
 import (
+	"github.com/sirupsen/logrus"
 	"net/http"
 
 	"Golang_Restful_API/pkg/e"
-	"Golang_Restful_API/pkg/logging"
 	"Golang_Restful_API/pkg/models"
 	"Golang_Restful_API/pkg/util"
 	"github.com/astaxie/beego/validation"
@@ -43,7 +43,7 @@ func GetAuth(c *gin.Context) {
 		}
 	} else {
 		for _, err := range valid.Errors {
-			logging.Info(err.Key, err.Message)
+			logrus.Info(err)
 		}
 	}
 
