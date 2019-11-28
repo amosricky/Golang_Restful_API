@@ -1,13 +1,9 @@
 package routers
 
 import (
-	"Golang_Restful_API/middleware/jwt"
-	"Golang_Restful_API/pkg/routers/api"
 	"Golang_Restful_API/pkg/routers/api/v1"
 	"Golang_Restful_API/pkg/setting"
-	"Golang_Restful_API/pkg/upload"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func InitRouter() *gin.Engine {
@@ -17,21 +13,11 @@ func InitRouter() *gin.Engine {
 
 	gin.SetMode(setting.ServerSetting.RunMode)
 
-	r.GET("/auth", api.GetAuth)
-	r.POST("/upload", api.UploadImage)
-	r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath()))
-
 	apiv1 := r.Group("/api/v1")
-	apiv1.Use(jwt.JWT())
-	apiv1.GET("/tags", v1.GetTags)
-	apiv1.POST("/tags", v1.AddTag)
-	apiv1.PUT("/tags/:id", v1.EditTag)
-	apiv1.DELETE("/tags/:id", v1.DeleteTag)
-	apiv1.GET("/articles", v1.GetArticles)
-	apiv1.GET("/articles/:id", v1.GetArticle)
-	apiv1.POST("/articles", v1.AddArticle)
-	apiv1.PUT("/articles/:id", v1.EditArticle)
-	apiv1.DELETE("/articles/:id", v1.DeleteArticle)
+	apiv1.GET("/author", v1.GetAuthor)
+	apiv1.POST("/author", v1.PostAuthor)
+	apiv1.PUT("/author/:id", v1.PutAuthor)
+	apiv1.DELETE("/author/:id", v1.DeleteAuthor)
 
 	return r
 }

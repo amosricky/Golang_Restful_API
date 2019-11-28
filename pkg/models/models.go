@@ -1,14 +1,12 @@
 package models
 
 import (
+	"Golang_Restful_API/pkg/setting"
 	"fmt"
-	"log"
-	"time"
-
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-
-	"Golang_Restful_API/pkg/setting"
+	"github.com/sirupsen/logrus"
+	"time"
 )
 
 var db *gorm.DB
@@ -24,9 +22,8 @@ type Model struct {
 func Setup() {
 	var err error
 	db, err = gorm.Open(setting.DatabaseSetting.Type, setting.DatabaseSetting.Path)
-
 	if err != nil {
-		log.Fatalf("models.Setup err: %v", err)
+		logrus.Fatalf("models.Setup err: %v", err)
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
@@ -40,16 +37,13 @@ func Setup() {
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 
-	tag := &Tag{}
-	article := &Article{}
-	auth := &Auth{}
-	tag.InitTagTable()
-	article.InitAriticleTable()
-	auth.InitAuthTable()
+	author := &Author{}
+	author.InitTagTable()
 }
 
 // CloseDB closes database connection (unnecessary)
 func CloseDB() {
+	logrus.Println("Close DB connection.")
 	defer db.Close()
 }
 

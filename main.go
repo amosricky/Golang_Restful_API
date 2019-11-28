@@ -7,11 +7,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
-	"path"
 	"time"
 )
 
@@ -23,19 +21,6 @@ func main() {
 		logrus.SetLevel(logrus.DebugLevel)
 	} else {
 		logrus.SetLevel(logrus.InfoLevel)
-	}
-
-	filePath := fmt.Sprintf("%s%s", setting.AppSetting.RuntimeRootPath, setting.AppSetting.LogSavePath)
-	fileName := fmt.Sprintf("%s%s.%s",
-		setting.AppSetting.LogSaveName,
-		time.Now().Format(setting.AppSetting.TimeFormat),
-		setting.AppSetting.LogFileExtension,
-	)
-	file, err := os.OpenFile(path.Join(filePath, fileName), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
-	if err == nil {
-		logrus.SetOutput(file)
-	} else {
-		logrus.Info("Failed to log to file, using default stderr")
 	}
 
 	router := routers.InitRouter()
@@ -50,7 +35,7 @@ func main() {
 
 	go func() {
 		if err := s.ListenAndServe(); err != nil {
-			log.Printf("Listen: %s\n", err)
+			logrus.Printf("Listen: %s\n", err)
 		}
 	}()
 
@@ -58,13 +43,14 @@ func main() {
 	signal.Notify(quit, os.Interrupt)
 	<- quit
 
-	log.Println("Shutdown Server ...")
+	logrus.Println("Shutdown Server ...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
 	defer cancel()
 	if err := s.Shutdown(ctx); err != nil {
-		log.Fatal("Server Shutdown:", err)
+		logrus.Fatal("Server Shutdown:", err)
 	}
 
-	log.Println("Server exiting")
+	models.CloseDB()
+	logrus.Println("Server exiting")
 }
