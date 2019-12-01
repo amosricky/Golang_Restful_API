@@ -35,7 +35,7 @@ func main() {
 
 	go func() {
 		if err := s.ListenAndServe(); err != nil {
-			logrus.Printf("Listen: %s\n", err)
+			logrus.Infof("Listen And Server: %v", err)
 		}
 	}()
 
@@ -43,14 +43,14 @@ func main() {
 	signal.Notify(quit, os.Interrupt)
 	<- quit
 
-	logrus.Println("Shutdown Server ...")
+	logrus.Infof("Shutdown Server ...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
 	defer cancel()
 	if err := s.Shutdown(ctx); err != nil {
-		logrus.Fatal("Server Shutdown:", err)
+		logrus.Fatalf("Server Shutdown: %v", err)
 	}
 
 	models.CloseDB()
-	logrus.Println("Server exiting")
+	logrus.Infof("Server exiting")
 }

@@ -38,7 +38,9 @@ func Setup() {
 	db.DB().SetMaxOpenConns(100)
 
 	author := &Author{}
+	article := &Article{}
 	author.InitTagTable()
+	article.InitAriticleTable()
 }
 
 // CloseDB closes database connection (unnecessary)

@@ -18,9 +18,14 @@ func (a *Author) InitTagTable()  {
 	}
 }
 
-func GetAuthor(pageNum int, pageSize int, maps interface {}) (author []Author) {
+func GetAuthors(pageNum int, pageSize int, maps interface {}) (author []Author) {
 	db.Where(maps).Offset(pageNum).Limit(pageSize).Find(&author)
 
+	return
+}
+
+func GetAuthor(id int) (author Author) {
+	db.Where("id = ?", id).First(&author)
 	return
 }
 
@@ -47,16 +52,6 @@ func DeleteAuthor(id int) bool {
 	db.Where("id = ?", id).Delete(&Author{})
 
 	return true
-}
-
-func ExistAuthorByName(name string) bool {
-	var author Author
-	db.Select("id").Where("name = ?", name).First(&author)
-	if author.ID > 0 {
-		return true
-	}
-
-	return false
 }
 
 func ExistAuthorByID(id int) bool {

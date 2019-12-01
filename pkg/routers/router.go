@@ -14,10 +14,18 @@ func InitRouter() *gin.Engine {
 	gin.SetMode(setting.ServerSetting.RunMode)
 
 	apiv1 := r.Group("/api/v1")
-	apiv1.GET("/author", v1.GetAuthor)
+
+	apiv1.GET("/author", v1.GetAuthors)
+	apiv1.GET("/author/:id", v1.GetAuthor)
 	apiv1.POST("/author", v1.PostAuthor)
 	apiv1.PUT("/author/:id", v1.PutAuthor)
 	apiv1.DELETE("/author/:id", v1.DeleteAuthor)
+
+	apiv1.GET("/article", v1.GetArticles)
+	apiv1.GET("/article/:id", v1.GetArticle)
+	//apiv1.POST("/articles", v1.AddArticle)
+	//apiv1.PUT("/articles/:id", v1.EditArticle)
+	//apiv1.DELETE("/articles/:id", v1.DeleteArticle)
 
 	return r
 }
