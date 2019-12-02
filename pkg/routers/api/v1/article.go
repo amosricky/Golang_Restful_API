@@ -44,8 +44,11 @@ func GetArticle(c *gin.Context) {
 			if err != nil{
 				logrus.Errorf("GetArticle :%v", err)
 				responseBody.SetExtendError(util.NewBaseError(http.StatusBadRequest, err.Error()))
-			}else {
+			}else if res.ID > 0{
 				responseBody.Result = res
+			}else {
+				logrus.Errorf("GetArticle :%v", util.GetMsg(util.ErrorNotExistArticle))
+				responseBody.SetExtendError(util.NewBaseError(util.ErrorNotExistArticle, ""))
 			}
 		}
 		break
@@ -55,136 +58,122 @@ func GetArticle(c *gin.Context) {
 }
 
 func AddArticle(c *gin.Context) {
-	tagId := com.StrTo(c.Query("tag_id")).MustInt()
-	title := c.Query("title")
-	desc := c.Query("desc")
-	content := c.Query("content")
-	createdBy := c.Query("created_by")
-	state := com.StrTo(c.DefaultQuery("state", "0")).MustInt()
 
-	valid := validation.Validation{}
-	valid.Min(tagId, 1, "tag_id").Message("标签ID必须大于0")
-	valid.Required(title, "title").Message("标题不能为空")
-	valid.Required(desc, "desc").Message("简述不能为空")
-	valid.Required(content, "content").Message("内容不能为空")
-	valid.Required(createdBy, "created_by").Message("创建人不能为空")
-	valid.Range(state, 0, 1, "state").Message("状态只允许0或1")
+	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
+	data := make(map[string]interface{})
 
-	code := e.INVALID_PARAMS
-	if ! valid.HasErrors() {
-		if models.ExistArticleByID(tagId) {
-			data := make(map[string]interface {})
-			data["tag_id"] = tagId
-			data["title"] = title
-			data["desc"] = desc
-			data["content"] = content
-			data["created_by"] = createdBy
-			data["state"] = state
-			models.AddArticle(data)
-			code = e.SUCCESS
-		} else {
-			code = e.ERROR_NOT_EXIST_TAG
+	for{
+		var addArticle models.Article
+		err := c.BindJSON(&addArticle)
+		if err != nil{
+			logrus.Errorf("PostArticle :%v", err)
+			responseBody.SetExtendError(util.NewBaseError(http.StatusBadRequest, err.Error()))
+			break
 		}
-	} else {
-		for _, err := range valid.Errors {
-			logrus.Error(err)
+
+		authorID := addArticle.AuthorID
+		title := addArticle.Title
+		desc := addArticle.Desc
+		content := addArticle.Content
+		imageUrl := addArticle.ImageUrl
+
+		data["authorID"] = authorID
+		data["title"] = title
+		data["desc"] = desc
+		data["content"] = content
+		data["imageUrl"] = imageUrl
+
+		valid := validation.Validation{}
+		valid.Min(authorID, 1, "authorID").Message("Invalid [author_id] (min:1)")
+		valid.Required(title, "title").Message("[title] can't be empty!")
+		valid.Required(desc, "desc").Message("[desc] can't be empty!")
+		valid.Required(content, "content").Message("[content] can't be empty!")
+		valid.Required(imageUrl, "imageUrl").Message("[imageUrl] can't be empty!")
+
+		if ! valid.HasErrors() {
+			err :=models.AddArticle(data)
+			if err != nil{
+				logrus.Errorf("PostArticle :%v", err.Error())
+				responseBody.SetExtendError(util.NewBaseError(http.StatusBadRequest, err.Error()))
+			}
+		}else {
+			errMsg := valid.Errors
+			logrus.Errorf("PostArticle :%v", errMsg[0].Message)
+			responseBody.SetExtendError(util.NewBaseError(http.StatusBadRequest, errMsg[0].Message))
 		}
+		break
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code" : code,
-		"msg" : e.GetMsg(code),
-		"data" : make(map[string]interface{}),
-	})
+	c.JSON(responseBody.StatusCode(), responseBody)
 }
 
-//func EditArticle(c *gin.Context) {
-//	valid := validation.Validation{}
-//
-//	id := com.StrTo(c.Param("id")).MustInt()
-//	tagId := com.StrTo(c.Query("tag_id")).MustInt()
-//	title := c.Query("title")
-//	desc := c.Query("desc")
-//	content := c.Query("content")
-//	modifiedBy := c.Query("modified_by")
-//
-//	var state int = -1
-//	if arg := c.Query("state"); arg != "" {
-//		state = com.StrTo(arg).MustInt()
-//		valid.Range(state, 0, 1, "state").Message("状态只允许0或1")
-//	}
-//
-//	valid.Min(id, 1, "id").Message("ID必须大于0")
-//	valid.MaxSize(title, 100, "title").Message("标题最长为100字符")
-//	valid.MaxSize(desc, 255, "desc").Message("简述最长为255字符")
-//	valid.MaxSize(content, 65535, "content").Message("内容最长为65535字符")
-//	valid.Required(modifiedBy, "modified_by").Message("修改人不能为空")
-//	valid.MaxSize(modifiedBy, 100, "modified_by").Message("修改人最长为100字符")
-//
-//	code := e.INVALID_PARAMS
-//	if ! valid.HasErrors() {
-//		if ok := models.ExistArticleByID(id); ok{
-//			if models.ExistAuthorByID(tagId) {
-//				data := make(map[string]interface {})
-//				if tagId > 0 {
-//					data["tag_id"] = tagId
-//				}
-//				if title != "" {
-//					data["title"] = title
-//				}
-//				if desc != "" {
-//					data["desc"] = desc
-//				}
-//				if content != "" {
-//					data["content"] = content
-//				}
-//
-//				data["modified_by"] = modifiedBy
-//
-//				models.EditArticle(id, data)
-//				code = e.SUCCESS
-//			} else {
-//				code = e.ERROR_NOT_EXIST_TAG
-//			}
-//		} else {
-//			code = e.ERROR_NOT_EXIST_ARTICLE
-//		}
-//	} else {
-//		for _, err := range valid.Errors {
-//			logrus.Error(err)
-//		}
-//	}
-//
-//	c.JSON(http.StatusOK, gin.H{
-//		"code" : code,
-//		"msg" : e.GetMsg(code),
-//		"data" : make(map[string]string),
-//	})
-//}
-//
-//func DeleteArticle(c *gin.Context) {
-//	id := com.StrTo(c.Param("id")).MustInt()
-//
-//	valid := validation.Validation{}
-//	valid.Min(id, 1, "id").Message("ID必须大于0")
-//
-//	code := e.INVALID_PARAMS
-//	if ! valid.HasErrors() {
-//		if ok := models.ExistArticleByID(id); ok{
-//			models.DeleteArticle(id)
-//			code = e.SUCCESS
-//		} else {
-//			code = e.ERROR_NOT_EXIST_ARTICLE
-//		}
-//	} else {
-//		for _, err := range valid.Errors {
-//			logrus.Error(err)
-//		}
-//	}
-//
-//	c.JSON(http.StatusOK, gin.H{
-//		"code" : code,
-//		"msg" : e.GetMsg(code),
-//		"data" : make(map[string]string),
-//	})
-//}
+func PutArticle(c *gin.Context) {
+
+	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
+	data := make(map[string]interface{})
+
+	for{
+		id := com.StrTo(c.Param("id")).MustInt()
+		var editArticle models.Article
+		err := c.BindJSON(&editArticle)
+		if err != nil{
+			logrus.Errorf("PutArticle :%v", err)
+			responseBody.SetExtendError(util.NewBaseError(http.StatusBadRequest, err.Error()))
+			break
+		}
+
+		authorID := editArticle.AuthorID
+		title := editArticle.Title
+		desc := editArticle.Desc
+		content := editArticle.Content
+		imageUrl := editArticle.ImageUrl
+
+		data["authorID"] = authorID
+		data["title"] = title
+		data["desc"] = desc
+		data["content"] = content
+		data["imageUrl"] = imageUrl
+
+		valid := validation.Validation{}
+		valid.Min(authorID, 1, "authorID").Message("Invalid [author_id] (min:1)")
+		valid.Required(title, "title").Message("[title] can't be empty!")
+		valid.Required(desc, "desc").Message("[desc] can't be empty!")
+		valid.Required(content, "content").Message("[content] can't be empty!")
+		valid.Required(imageUrl, "imageUrl").Message("[imageUrl] can't be empty!")
+
+		if ! valid.HasErrors() {
+			if models.ExistArticleByID(id) {
+				err := models.EditArticle(id, data)
+				if err != nil{
+					logrus.Errorf("PutArticle :%v", err.Error())
+					responseBody.SetExtendError(util.NewBaseError(http.StatusBadRequest, err.Error()))
+				}
+			} else {
+				logrus.Errorf("PutArticle :%v", util.GetMsg(util.ErrorNotExistArticle))
+				responseBody.SetExtendError(util.NewBaseError(util.ErrorNotExistArticle, ""))
+			}
+		}else {
+			errMsg := valid.Errors
+			logrus.Errorf("PutArticle :%v", errMsg[0].Message)
+			responseBody.SetExtendError(util.NewBaseError(http.StatusBadRequest, errMsg[0].Message))
+		}
+		break
+	}
+
+	c.JSON(responseBody.StatusCode(), responseBody)
+}
+
+func DeleteArticle(c *gin.Context) {
+
+	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
+	id := com.StrTo(c.Param("id")).MustInt()
+
+	if models.ExistArticleByID(id) {
+		models.DeleteArticle(id)
+	} else {
+		logrus.Errorf("DeleteArticle :%v", util.GetMsg(util.ErrorNotExistArticle))
+		responseBody.SetExtendError(util.NewBaseError(util.ErrorNotExistArticle, ""))
+	}
+
+	c.JSON(responseBody.StatusCode(), responseBody)
+}

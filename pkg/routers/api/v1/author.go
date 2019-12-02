@@ -11,7 +11,6 @@ import (
 	"net/http"
 )
 
-
 func GetAuthors(c *gin.Context) {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
@@ -40,7 +39,7 @@ func GetAuthor(c *gin.Context) {
 			responseBody.Result = res
 		}else {
 			logrus.Errorf("GetAuthor :%v", util.GetMsg(util.ErrorNotExistAuthor))
-			responseBody.SetExtendError(util.NewBaseError(util.ErrorNotExistAuthor, util.GetMsg(util.ErrorNotExistAuthor)))
+			responseBody.SetExtendError(util.NewBaseError(util.ErrorNotExistAuthor, ""))
 		}
 	}
 
@@ -64,10 +63,10 @@ func PostAuthor(c *gin.Context) {
 		born := addAuthor.Born
 
 		valid := validation.Validation{}
-		valid.Required(name, "name").Message("[Name] can't be empty!")
-		valid.MaxSize(name, 100, "name").Message("Name is too long!")
-		valid.Required(born, "born").Message("[Born] can't be empty!")
-		valid.Range(born, 1000, 2500, "born").Message("Invalid Born number! (min:1000, max:2500)")
+		valid.Required(name, "name").Message("[name] can't be empty!")
+		valid.MaxSize(name, 100, "name").Message("[name] is too long! (max:100)")
+		valid.Required(born, "born").Message("[born] can't be empty!")
+		valid.Range(born, 1000, 2500, "born").Message("Invalid [born] number! (min:1000, max:2500)")
 
 		if ! valid.HasErrors() {
 			models.AddAuthor(name, born)
@@ -100,17 +99,17 @@ func PutAuthor(c *gin.Context) {
 		born := editAuthor.Born
 
 		valid := validation.Validation{}
-		valid.Required(name, "name").Message("[Name] can't be empty!")
-		valid.MaxSize(name, 100, "name").Message("Name is too long!")
-		valid.Required(born, "born").Message("[Born] can't be empty!")
-		valid.Range(born, 1000, 2500, "born").Message("Invalid Born number! (min:1000, max:2500)")
+		valid.Required(name, "name").Message("[name] can't be empty!")
+		valid.MaxSize(name, 100, "name").Message("[name] is too long!")
+		valid.Required(born, "born").Message("[born] can't be empty!")
+		valid.Range(born, 1000, 2500, "born").Message("Invalid [born] number! (min:1000, max:2500)")
 
 		if ! valid.HasErrors() {
 			if models.ExistAuthorByID(id) {
 				models.EditAuthor(id, name, born)
 			} else {
-				logrus.Errorf("PutAuthor :%v", util.GetMsg(util.ErrorExistAuthor))
-				responseBody.SetExtendError(util.NewBaseError(util.ErrorExistAuthor, ""))
+				logrus.Errorf("PutAuthor :%v", util.GetMsg(util.ErrorNotExistAuthor))
+				responseBody.SetExtendError(util.NewBaseError(util.ErrorNotExistAuthor, ""))
 			}
 		}else {
 			errMsg := valid.Errors
@@ -126,7 +125,6 @@ func PutAuthor(c *gin.Context) {
 func DeleteAuthor(c *gin.Context) {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
-
 	id := com.StrTo(c.Param("id")).MustInt()
 
 	if models.ExistAuthorByID(id) {
