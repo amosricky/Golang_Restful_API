@@ -10,18 +10,43 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"path"
 	"time"
 )
 
-func main() {
-	setting.Setup()
-	models.Setup()
+func setLogrus()  {
 
 	if setting.ServerSetting.RunMode == "debug" {
 		logrus.SetLevel(logrus.DebugLevel)
 	} else {
 		logrus.SetLevel(logrus.InfoLevel)
 	}
+
+	for{
+		filePath := fmt.Sprintf("%s%s", setting.AppSetting.RuntimeRootPath, setting.LogSetting.LogSavePath)
+		fileName := fmt.Sprintf("%s%s.%s",
+			setting.LogSetting.LogPrefix,
+			time.Now().Format(setting.LogSetting.TimeFormat),
+			setting.LogSetting.LogFileExtension,
+		)
+		if err := os.MkdirAll(filePath, os.ModePerm); err != nil{
+			logrus.Info("Failed to log to file, using default stderr")
+			break
+		}
+		file, err := os.OpenFile(path.Join(filePath, fileName), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
+		if err == nil {
+			logrus.SetOutput(file)
+		} else {
+			logrus.Info("Failed to log to file, using default stderr")
+		}
+		break
+	}
+}
+
+func main() {
+	setting.Setup()
+	models.Setup()
+	setLogrus()
 
 	router := routers.InitRouter()
 

@@ -25,9 +25,17 @@ type Database struct {
 	TablePrefix string
 }
 
+type Log struct {
+	LogSavePath string
+	LogPrefix string
+	LogFileExtension string
+	TimeFormat string
+}
+
 var AppSetting = &App{}
 var ServerSetting = &Server{}
 var DatabaseSetting = &Database{}
+var LogSetting = &Log{}
 
 var cfg *ini.File
 
@@ -42,6 +50,7 @@ func Setup() {
 	mapTo("app", AppSetting)
 	mapTo("server", ServerSetting)
 	mapTo("database", DatabaseSetting)
+	mapTo("log", LogSetting)
 
 	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
 	ServerSetting.WriteTimeout = ServerSetting.WriteTimeout * time.Second
