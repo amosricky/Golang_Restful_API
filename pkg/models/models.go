@@ -39,8 +39,10 @@ func Setup() {
 
 	author := &Author{}
 	article := &Article{}
+	user := &User{}
 	author.InitTagTable()
 	article.InitAriticleTable()
+	user.InitUserTable()
 }
 
 // CloseDB closes database connection (unnecessary)

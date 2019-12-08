@@ -3,6 +3,7 @@ package routers
 import (
 	"Golang_Restful_API/pkg/routers/api/v1"
 	"Golang_Restful_API/pkg/setting"
+	"Golang_Restful_API/pkg/util"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,6 +15,10 @@ func InitRouter() *gin.Engine {
 	gin.SetMode(setting.ServerSetting.RunMode)
 
 	apiv1 := r.Group("/api/v1")
+	apiv1.POST("/register", v1.Register)
+	apiv1.POST("/login", v1.Login)
+
+	apiv1.Use(util.JWTAuth())
 
 	apiv1.GET("/author", v1.GetAuthors)
 	apiv1.GET("/author/:id", v1.GetAuthor)

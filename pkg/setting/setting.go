@@ -9,6 +9,7 @@ import (
 type App struct {
 	PageSize int
 	RuntimeRootPath string
+	JWTSalt string
 }
 
 type Server struct {
@@ -16,6 +17,8 @@ type Server struct {
 	HttpPort int
 	ReadTimeout time.Duration
 	WriteTimeout time.Duration
+	RandomMin int
+	RandomMax int
 }
 
 type Database struct {
