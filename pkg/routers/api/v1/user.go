@@ -60,7 +60,7 @@ func Login(c *gin.Context)  {
 		var login models.LoginUser
 		err := c.BindJSON(&login)
 		if err != nil{
-			logrus.Errorf("Login :%v", err)
+			logrus.Errorf("Login :%v", err.Error())
 			responseBody.SetExtendError(util.NewBaseError(http.StatusBadRequest, err.Error()))
 			break
 		}

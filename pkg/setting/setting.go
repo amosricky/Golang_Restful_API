@@ -35,10 +35,18 @@ type Log struct {
 	TimeFormat string
 }
 
+type Image struct {
+	ImageMaxSize int
+	ImageSavePath string
+	ImageAllowExtension []string
+	ImagePrefixUrl string
+}
+
 var AppSetting = &App{}
 var ServerSetting = &Server{}
 var DatabaseSetting = &Database{}
 var LogSetting = &Log{}
+var ImageSetting = &Image{}
 
 var cfg *ini.File
 
@@ -54,7 +62,9 @@ func Setup() {
 	mapTo("server", ServerSetting)
 	mapTo("database", DatabaseSetting)
 	mapTo("log", LogSetting)
+	mapTo("image", ImageSetting)
 
+	ImageSetting.ImageMaxSize = ImageSetting.ImageMaxSize * 1024 * 1024
 	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
 	ServerSetting.WriteTimeout = ServerSetting.WriteTimeout * time.Second
 }

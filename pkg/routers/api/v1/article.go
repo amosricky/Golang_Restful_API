@@ -18,7 +18,7 @@ func GetArticles(c *gin.Context) {
 	for{
 		res, err := models.GetArticles(util.GetPage(c), setting.AppSetting.PageSize)
 		if err != nil{
-			logrus.Errorf("GetArticles :%v", err)
+			logrus.Errorf("GetArticles :%v", err.Error())
 			responseBody.SetExtendError(util.NewBaseError(http.StatusBadRequest, err.Error()))
 		}else {
 			responseBody.Result = res
@@ -42,7 +42,7 @@ func GetArticle(c *gin.Context) {
 		}else {
 			res, err := models.GetArticle(id)
 			if err != nil{
-				logrus.Errorf("GetArticle :%v", err)
+				logrus.Errorf("GetArticle :%v", err.Error())
 				responseBody.SetExtendError(util.NewBaseError(http.StatusBadRequest, err.Error()))
 			}else if res.ID > 0{
 				responseBody.Result = res
@@ -66,7 +66,7 @@ func AddArticle(c *gin.Context) {
 		var addArticle models.Article
 		err := c.BindJSON(&addArticle)
 		if err != nil{
-			logrus.Errorf("PostArticle :%v", err)
+			logrus.Errorf("PostArticle :%v", err.Error())
 			responseBody.SetExtendError(util.NewBaseError(http.StatusBadRequest, err.Error()))
 			break
 		}
@@ -117,7 +117,7 @@ func PutArticle(c *gin.Context) {
 		var editArticle models.Article
 		err := c.BindJSON(&editArticle)
 		if err != nil{
-			logrus.Errorf("PutArticle :%v", err)
+			logrus.Errorf("PutArticle :%v", err.Error())
 			responseBody.SetExtendError(util.NewBaseError(http.StatusBadRequest, err.Error()))
 			break
 		}

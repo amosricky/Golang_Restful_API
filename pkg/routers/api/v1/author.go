@@ -54,7 +54,7 @@ func PostAuthor(c *gin.Context) {
 		var addAuthor models.Author
 		err := c.BindJSON(&addAuthor)
 		if err != nil{
-			logrus.Errorf("PostAuthor :%v", err)
+			logrus.Errorf("PostAuthor :%v", err.Error())
 			responseBody.SetExtendError(util.NewBaseError(http.StatusBadRequest, err.Error()))
 			break
 		}
@@ -90,7 +90,7 @@ func PutAuthor(c *gin.Context) {
 		var editAuthor models.Author
 		err := c.BindJSON(&editAuthor)
 		if err != nil{
-			logrus.Errorf("PutAuthor :%v", err)
+			logrus.Errorf("PutAuthor :%v", err.Error())
 			responseBody.SetExtendError(util.NewBaseError(http.StatusBadRequest, err.Error()))
 			break
 		}

@@ -5,12 +5,14 @@ import (
 	"Golang_Restful_API/pkg/setting"
 	"Golang_Restful_API/pkg/util"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func InitRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	r.StaticFS("/images", http.Dir(util.GetImageFullPath()))
 
 	gin.SetMode(setting.ServerSetting.RunMode)
 
@@ -19,6 +21,8 @@ func InitRouter() *gin.Engine {
 	apiv1.POST("/login", v1.Login)
 
 	apiv1.Use(util.JWTAuth())
+
+	apiv1.POST("/upload", v1.UploadImage)
 
 	apiv1.GET("/author", v1.GetAuthors)
 	apiv1.GET("/author/:id", v1.GetAuthor)

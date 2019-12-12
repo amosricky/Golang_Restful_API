@@ -11,10 +11,12 @@ const (
 	ErrorNoAuth             = 10007
 	ErrorToken				= 10008
 	ErrorExpired			= 10009
+	ErrorImageNotExist	    = 10010
+	ErrorImageFormat	    = 10011
 )
 
 var MsgFlags = map[int]string{
-	ErrorInvalidErrCode:              "Invalid Error Code",
+	ErrorInvalidErrCode:              "Invalid error code",
 	ErrorInvalidID: 				  "Invalid ID",
 	ErrorNotExistAuthor:  			  "Author not exist",
 	ErrorNotExistArticle:             "Article not exist",
@@ -24,6 +26,8 @@ var MsgFlags = map[int]string{
 	ErrorNoAuth:					  "No auth token",
 	ErrorToken:                       "Token error",
 	ErrorExpired:					  "Token expired",
+	ErrorImageNotExist:               "Image not exist",
+	ErrorImageFormat:                 "Image format not correct",
 }
 
 func GetMsg(code int) string {

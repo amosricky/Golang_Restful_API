@@ -66,7 +66,7 @@ func JWTAuth() gin.HandlerFunc{
 
 		for{
 			authorization := c.Request.Header.Get("Authorization")
-			fmt.Println(authorization)
+
 			if len(authorization) == 0 {
 				responseBody.SetExtendError(NewBaseError(ErrorNoAuth, ""))
 				break
