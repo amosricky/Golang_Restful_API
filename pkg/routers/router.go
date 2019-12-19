@@ -1,10 +1,14 @@
 package routers
 
 import (
+	_ "Golang_Restful_API/docs"
 	"Golang_Restful_API/pkg/routers/api/v1"
 	"Golang_Restful_API/pkg/setting"
 	"Golang_Restful_API/pkg/util"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"net/http"
 )
 
@@ -12,7 +16,14 @@ func InitRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:  []string{"*"},
+		AllowMethods:  []string{"GET", "GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"},
+		AllowHeaders:  []string{"content-type", "authorization"},
+		ExposeHeaders: []string{"X-Total-Count"},
+	}))
 	r.StaticFS("/images", http.Dir(util.GetImageFullPath()))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL("http://localhost:8000/swagger/doc.json")))
 
 	gin.SetMode(setting.ServerSetting.RunMode)
 

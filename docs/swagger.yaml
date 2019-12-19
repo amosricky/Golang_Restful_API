@@ -1,0 +1,585 @@
+basePath: /api/v1
+definitions:
+  example.ArticleInfo:
+    properties:
+      author:
+        $ref: '#/definitions/example.AuthorInfo'
+        type: object
+      author_id:
+        example: 1
+        type: integer
+      content:
+        example: Although classified as a comedy....
+        type: string
+      created_on:
+        example: 1574952062
+        type: integer
+      deleted_on:
+        example: 0
+        type: integer
+      desc:
+        example: The Merchant of Venice is a 16th-century play written by William
+          Shakespeare
+        type: string
+      id:
+        example: 1
+        type: integer
+      image_url:
+        example: http://xxx.xxx.xxx.jpeg
+        type: string
+      modified_on:
+        example: 1575189888
+        type: integer
+      title:
+        example: 'The Merchant Venice '
+        type: string
+    type: object
+  example.ArticleNotExist:
+    properties:
+      error_code:
+        example: 10003
+        type: integer
+      error_message:
+        example: Article not exist
+        type: string
+      result:
+        type: string
+    type: object
+  example.AuthorInfo:
+    properties:
+      born:
+        example: 1564
+        type: integer
+      created_on:
+        example: 1574952062
+        type: integer
+      deleted_on:
+        example: 0
+        type: integer
+      id:
+        example: 1
+        type: integer
+      modified_on:
+        example: 1575189888
+        type: integer
+      name:
+        example: William Shakespeare
+        type: string
+    type: object
+  example.AuthorNotExist:
+    properties:
+      error_code:
+        example: 10002
+        type: integer
+      error_message:
+        example: Author not exist
+        type: string
+      result:
+        type: string
+    type: object
+  example.ErrorExistUser:
+    properties:
+      error_code:
+        example: 10005
+        type: integer
+      error_message:
+        example: User account already exist
+        type: string
+      result:
+        type: string
+    type: object
+  example.ErrorImageFormat:
+    properties:
+      error_code:
+        example: 10011
+        type: integer
+      error_message:
+        example: Image format not correct
+        type: string
+      result:
+        type: string
+    type: object
+  example.ErrorPasswdWrong:
+    properties:
+      error_code:
+        example: 10006
+        type: integer
+      error_message:
+        example: Wrong password
+        type: string
+      result:
+        type: string
+    type: object
+  example.GetArticle:
+    properties:
+      error_code:
+        example: 200
+        type: integer
+      error_message:
+        example: OK
+        type: string
+      result:
+        $ref: '#/definitions/example.ArticleInfo'
+        type: object
+    type: object
+  example.GetArticles:
+    properties:
+      error_code:
+        example: 200
+        type: integer
+      error_message:
+        example: OK
+        type: string
+      result:
+        items:
+          $ref: '#/definitions/example.ArticleInfo'
+        type: array
+    type: object
+  example.GetAuthor:
+    properties:
+      error_code:
+        example: 200
+        type: integer
+      error_message:
+        example: OK
+        type: string
+      result:
+        $ref: '#/definitions/example.AuthorInfo'
+        type: object
+    type: object
+  example.GetAuthors:
+    properties:
+      error_code:
+        example: 200
+        type: integer
+      error_message:
+        example: OK
+        type: string
+      result:
+        items:
+          $ref: '#/definitions/example.AuthorInfo'
+        type: array
+    type: object
+  example.InvalidID:
+    properties:
+      error_code:
+        example: 10001
+        type: integer
+      error_message:
+        example: Invalid ID
+        type: string
+      result:
+        type: string
+    type: object
+  example.OK:
+    properties:
+      error_code:
+        example: 200
+        type: integer
+      error_message:
+        example: OK
+        type: string
+      result:
+        example: OK
+        type: string
+    type: object
+  example.PostArticle:
+    properties:
+      author_id:
+        example: 1
+        type: integer
+      content:
+        example: Although classified as a comedy....
+        type: string
+      desc:
+        example: The Merchant of Venice is a 16th-century play written by William
+          Shakespeare
+        type: string
+      image_url:
+        example: http://xxx.xxx.xxx.jpeg
+        type: string
+      title:
+        example: 'The Merchant Venice '
+        type: string
+    type: object
+  example.PostAuthor:
+    properties:
+      born:
+        example: 1847
+        type: integer
+      name:
+        example: Thomas Alva Edison
+        type: string
+    type: object
+  example.PostLogin:
+    properties:
+      account:
+        example: edison1234
+        type: string
+      password:
+        example: test1234
+        type: string
+    type: object
+  example.PostRegister:
+    properties:
+      account:
+        example: edison1234
+        type: string
+      name:
+        example: edison
+        type: string
+      password:
+        example: test1234
+        type: string
+    type: object
+  example.UploadImage:
+    properties:
+      error_code:
+        example: 200
+        type: integer
+      error_message:
+        example: OK
+        type: string
+      result:
+        $ref: '#/definitions/example.UploadImageInfo'
+        type: object
+    type: object
+  example.UploadImageInfo:
+    properties:
+      encode_file_name:
+        example: fd456406745d816a45cae554c788e754.jpeg
+        type: string
+      image_url:
+        example: http://127.0.0.1:8000/images/fd456406745d816a45cae554c788e754.jpeg
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a simple API for personal blog.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Golang Restful API
+  version: "1.0"
+paths:
+  /article:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/example.GetArticles'
+            type: array
+      summary: Get list of articles.
+      tags:
+      - article
+    post:
+      consumes:
+      - application/json
+      description: '</p>[author_id] : Author id (min:1)</p>[title] : The article title
+        </p>[desc] : Description of article </p>[content] : Content of article </p>[imageUrl]
+        : Url of image'
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/example.PostArticle'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.OK'
+      summary: Add new article
+      tags:
+      - article
+  /article/{id}:
+    delete:
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.OK'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/example.ArticleNotExist'
+      summary: Delete article info
+      tags:
+      - article
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/example.GetArticle'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/example.ArticleNotExist'
+      summary: Get article info by ID.
+      tags:
+      - article
+    put:
+      consumes:
+      - application/json
+      description: '</p>[author_id] : Author id (min:1)</p>[title] : The article title
+        </p>[desc] : Description of article </p>[content] : Content of article </p>[imageUrl]
+        : Url of image'
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/example.PostArticle'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.OK'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/example.ArticleNotExist'
+      summary: Modify article info
+      tags:
+      - article
+  /author:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/example.GetAuthors'
+            type: array
+      summary: Get list of authors.
+      tags:
+      - author
+    post:
+      consumes:
+      - application/json
+      description: '</p>[name] : Author name (max:100) </p>[born] : The born year
+        of the author (min:1000, max:2500)'
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/example.PostAuthor'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.OK'
+      summary: Add new author
+      tags:
+      - author
+  /author/{id}:
+    delete:
+      parameters:
+      - description: Author ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.OK'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/example.AuthorNotExist'
+      summary: Delete author info
+      tags:
+      - author
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Author ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/example.GetAuthor'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/example.InvalidID'
+      summary: Get author info by ID.
+      tags:
+      - author
+    put:
+      consumes:
+      - application/json
+      description: '</p>[name] : Author name (max:100) </p>[born] : The born year
+        of the author (min:1000, max:2500)'
+      parameters:
+      - description: Author ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/example.PostAuthor'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.OK'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/example.AuthorNotExist'
+      summary: Modify author info
+      tags:
+      - author
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: '</p>[account] : (min: 6, max:12)</p>[password] : (min: 6, max:12)'
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/example.PostLogin'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.OK'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/example.ErrorPasswdWrong'
+      summary: Login and get new JWT token
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: '</p>[account] : (min: 6, max:12) </p>[name] : (max:12) </p>[password]
+        : (min: 6, max:12)'
+      parameters:
+      - description: ' '
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/example.PostRegister'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.OK'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/example.ErrorExistUser'
+      summary: Register new user
+  /upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '</p>[image] : Accept format (.jpg,.jpeg,.png) Max Size : 5MB'
+      parameters:
+      - description: Your image file.
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.UploadImage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/example.ErrorImageFormat'
+      summary: Upload image
+schemes:
+- http
+- https
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -14,6 +14,7 @@ import (
 	"time"
 )
 
+// Set up the log file environment
 func setLogrus()  {
 
 	if setting.ServerSetting.RunMode == "debug" {
@@ -43,7 +44,20 @@ func setLogrus()  {
 	}
 }
 
+// @title Golang Restful API
+// @version 1.0
+// @description This is a simple API for personal blog.
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @BasePath /api/v1
+// @schemes http https
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
+	// Init the conf.ini and database
 	setting.Setup()
 	models.Setup()
 	setLogrus()
@@ -58,6 +72,7 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
+	// Graceful shutdown
 	go func() {
 		if err := s.ListenAndServe(); err != nil {
 			logrus.Infof("Listen And Server: %v", err)

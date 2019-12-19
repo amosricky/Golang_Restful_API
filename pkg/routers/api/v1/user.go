@@ -9,6 +9,14 @@ import (
 	"net/http"
 )
 
+// @Summary Register new user
+// @Description </p>[account] : (min: 6, max:12) </p>[name] : (max:12) </p>[password] : (min: 6, max:12)
+// @Accept  json
+// @Produce  json
+// @Param body body example.PostRegister true " "
+// @Success 200 {object} example.OK
+// @Success 500 {object} example.ErrorExistUser
+// @Router /register [post]
 func Register(c *gin.Context) {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
@@ -51,6 +59,14 @@ func Register(c *gin.Context) {
 	c.JSON(responseBody.StatusCode(), responseBody)
 }
 
+// @Summary Login and get new JWT token
+// @Description </p>[account] : (min: 6, max:12)</p>[password] : (min: 6, max:12)
+// @Accept  json
+// @Produce  json
+// @Param body body example.PostLogin true " "
+// @Success 200 {object} example.OK
+// @Success 500 {object} example.ErrorPasswdWrong
+// @Router /login [post]
 func Login(c *gin.Context)  {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))

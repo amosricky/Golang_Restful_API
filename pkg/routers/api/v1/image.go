@@ -7,6 +7,14 @@ import (
 	"net/http"
 )
 
+// @Summary Upload image
+// @Description  </p>[image] : Accept format (.jpg,.jpeg,.png) Max Size : 5MB
+// @Accept  multipart/form-data
+// @Produce  json
+// @Param image formData file true "Your image file."
+// @Success 200 {object} example.UploadImage
+// @Success 500 {object} example.ErrorImageFormat
+// @Router /upload [post]
 func UploadImage(c *gin.Context) {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))

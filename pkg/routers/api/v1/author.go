@@ -11,6 +11,12 @@ import (
 	"net/http"
 )
 
+// @Summary Get list of authors.
+// @Tags author
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} example.GetAuthors
+// @Router /author [get]
 func GetAuthors(c *gin.Context) {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
@@ -25,6 +31,14 @@ func GetAuthors(c *gin.Context) {
 	c.JSON(responseBody.StatusCode(), responseBody)
 }
 
+// @Summary Get author info by ID.
+// @Tags author
+// @Accept  json
+// @Produce  json
+// @Param   id   path   string   true   "Author ID"
+// @Success 200 {array} example.GetAuthor
+// @Failure 500 {object} example.InvalidID
+// @Router /author/{id} [get]
 func GetAuthor(c *gin.Context) {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
@@ -46,6 +60,14 @@ func GetAuthor(c *gin.Context) {
 	c.JSON(responseBody.StatusCode(), responseBody)
 }
 
+// @Summary Add new author
+// @Description </p>[name] : Author name (max:100) </p>[born] : The born year of the author (min:1000, max:2500)
+// @Tags author
+// @Accept  json
+// @Produce  json
+// @Param body body example.PostAuthor true " "
+// @Success 200 {object} example.OK
+// @Router /author [post]
 func PostAuthor(c *gin.Context) {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
@@ -81,6 +103,16 @@ func PostAuthor(c *gin.Context) {
 	c.JSON(responseBody.StatusCode(), responseBody)
 }
 
+// @Summary Modify author info
+// @Description </p>[name] : Author name (max:100) </p>[born] : The born year of the author (min:1000, max:2500)
+// @Tags author
+// @Accept  json
+// @Produce  json
+// @Param   id   path   string   true   "Author ID"
+// @Param body body example.PostAuthor true " "
+// @Success 200 {object} example.OK
+// @Failure 500 {object} example.AuthorNotExist
+// @Router /author/{id} [put]
 func PutAuthor(c *gin.Context) {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
@@ -122,6 +154,13 @@ func PutAuthor(c *gin.Context) {
 	c.JSON(responseBody.StatusCode(), responseBody)
 }
 
+// @Summary Delete author info
+// @Tags author
+// @Produce  json
+// @Param   id   path   string   true   "Author ID"
+// @Success 200 {object} example.OK
+// @Failure 500 {object} example.AuthorNotExist
+// @Router /author/{id} [delete]
 func DeleteAuthor(c *gin.Context) {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))

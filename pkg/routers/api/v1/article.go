@@ -11,6 +11,12 @@ import (
 	"net/http"
 )
 
+// @Summary Get list of articles.
+// @Tags article
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} example.GetArticles
+// @Router /article [get]
 func GetArticles(c *gin.Context) {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
@@ -29,6 +35,14 @@ func GetArticles(c *gin.Context) {
 	c.JSON(responseBody.StatusCode(), responseBody)
 }
 
+// @Summary Get article info by ID.
+// @Tags article
+// @Accept  json
+// @Produce  json
+// @Param   id   path   string   true   "Article ID"
+// @Success 200 {array} example.GetArticle
+// @Failure 500 {object} example.ArticleNotExist
+// @Router /article/{id} [get]
 func GetArticle(c *gin.Context) {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
@@ -57,6 +71,14 @@ func GetArticle(c *gin.Context) {
 	c.JSON(responseBody.StatusCode(), responseBody)
 }
 
+// @Summary Add new article
+// @Description </p>[author_id] : Author id (min:1)</p>[title] : The article title </p>[desc] : Description of article </p>[content] : Content of article </p>[imageUrl] : Url of image
+// @Tags article
+// @Accept  json
+// @Produce  json
+// @Param body body example.PostArticle true " "
+// @Success 200 {object} example.OK
+// @Router /article [post]
 func AddArticle(c *gin.Context) {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
@@ -107,6 +129,16 @@ func AddArticle(c *gin.Context) {
 	c.JSON(responseBody.StatusCode(), responseBody)
 }
 
+// @Summary Modify article info
+// @Description </p>[author_id] : Author id (min:1)</p>[title] : The article title </p>[desc] : Description of article </p>[content] : Content of article </p>[imageUrl] : Url of image
+// @Tags article
+// @Accept  json
+// @Produce  json
+// @Param   id   path   string   true   "Article ID"
+// @Param body body example.PostArticle true " "
+// @Success 200 {object} example.OK
+// @Failure 500 {object} example.ArticleNotExist
+// @Router /article/{id} [put]
 func PutArticle(c *gin.Context) {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
@@ -163,6 +195,13 @@ func PutArticle(c *gin.Context) {
 	c.JSON(responseBody.StatusCode(), responseBody)
 }
 
+// @Summary Delete article info
+// @Tags article
+// @Produce  json
+// @Param   id   path   string   true   "Article ID"
+// @Success 200 {object} example.OK
+// @Failure 500 {object} example.ArticleNotExist
+// @Router /article/{id} [delete]
 func DeleteArticle(c *gin.Context) {
 
 	responseBody := util.NewResponseBody(util.NewBaseError(http.StatusOK, ""))
