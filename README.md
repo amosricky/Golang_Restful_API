@@ -1,16 +1,23 @@
 # Golang Restful API
-This is a simple restful API for blog system. You could create, update, modify and delete for author and article table.
-All of the API use JWT as authorization.
+This is a simple restful API for blog system and all of the API use JWT as authorization.. 
+You could ...
+1. Create, update, modify and delete for author and article table.
+2. Upload image file and get static url.
+3. Login and register without save real password in database.
+
 
 ![](https://raw.githubusercontent.com/amosricky/Golang_Restful_API/develop/src/golang_restful_api_doc.png)
 
 ## Quick Start
 ```
-# Go get from github
-$ go get github.com/amosricky/Golang_Restful_API
+# Change path to $GOPATH/src
+$ cd $GOPATH/src
 
-# Change path
-$ cd $GOPATH/src/Golang_Restful_API/src
+# Git clone from github
+$ git clone https://github.com/amosricky/Golang_Restful_API.git
+
+# Change path to project
+$ cd ./Golang_Restful_API
 
 # Build docker image
 $ docker build -t golang-api . 
