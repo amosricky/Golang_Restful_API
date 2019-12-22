@@ -3,10 +3,13 @@ This is a simple restful API for blog system and all of the API use JWT as autho
 You could ...
 1. Create, update, modify and delete for author and article table.
 2. Upload image file and get static url.
-3. Login and register without save real password in database.
+3. Login and register without saving real password in database.
 
 
 ![](https://raw.githubusercontent.com/amosricky/Golang_Restful_API/develop/src/golang_restful_api_doc.png)
+
+## API Document
+Run it, and browser to http://localhost:8000/swagger/index.html, you can see Swagger 2.0 Api documents.
 
 ## Quick Start
 ```
@@ -25,9 +28,6 @@ $ docker build -t golang-api .
 # Run it in container
 $ docker run -p 8000:8000 golang-api
 ```
-
-## Swagger document
-Run it, and browser to http://localhost:8000/swagger/index.html, you can see Swagger 2.0 Api documents.
 
 ## Features
 - Use Gin as framework to build up a RESTful API
